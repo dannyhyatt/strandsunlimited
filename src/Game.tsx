@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { GameData } from "./GameData";
-import SVGGrid, { circlePositions } from "./GameGrid";
+import SVGGrid, { circlePositions, toFromToArray } from "./GameGrid";
 
 
 export default function Game({ data } : { data: GameData }) {
@@ -10,8 +10,18 @@ export default function Game({ data } : { data: GameData }) {
     { from: "2-1", to: "2-2" },
   ]);
 
+  const [foundLines, setFoundLines] = useState<string[][]>([]);
+
   // array of all the node ids
   const [currentLine, setCurrentLine] = useState<string[]>([]);
+
+  console.log('currentLine', currentLine);
+
+  const submitLine = () => {
+    if(data.positions.some((ids) => ids.every((id,i) => currentLine.length > i && currentLine[i] === id)))
+      setFoundLines([...foundLines, currentLine]);
+    setCurrentLine([]);
+  }
 
   const getStringFromIds = (ids: string[]) => {
     return ids.map((id) => getLetterFromId(id)).join('');
@@ -25,14 +35,6 @@ export default function Game({ data } : { data: GameData }) {
       }
     }
     return '-'; // so we know if something went wrong
-  }
-
-  const toFromToArray = (ids: string[]) => {
-    const arr = [];
-    for(let i = 0; i < ids.length - 1; i++) {
-      arr.push({ from: ids[i], to: ids[i + 1] });
-    }
-    return arr;
   }
 
   const isNeighbor = (id1: string, id2: string) => {
@@ -75,7 +77,18 @@ export default function Game({ data } : { data: GameData }) {
     <div className="relative">
 
       <SVGGrid
-        lines={toFromToArray(currentLine)}
+        lines={[
+          {
+            ids: currentLine,
+            color: 'red'
+          },
+          ...foundLines.map((line) => {
+            return {
+              ids: line,
+              color: 'green'
+            }
+          })
+        ]}
         addNewLine={(newLine) => setLines((lines) => [...lines, newLine])}
         removeLineByIndex={(lineIdx) =>
           setLines([...lines.slice(0, lineIdx), ...lines.slice(lineIdx + 1)])
@@ -84,9 +97,9 @@ export default function Game({ data } : { data: GameData }) {
       
       <div 
         className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8"
-        onMouseUp={(e) => {
+        onMouseUp={(_) => {
           if(currentLine.length > 1) {
-            setCurrentLine([]);
+            submitLine();
           }
         
         }}
@@ -106,8 +119,8 @@ export default function Game({ data } : { data: GameData }) {
                 className="cursor-pointer flex"
               >
                 <span
-                  className={`${currentLine.includes(id) ? 'bg-slate-400' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
-                  onClick={(e) => {
+                  className={`${currentLine.includes(id) ? 'bg-slate-400' : foundLines.flat().includes(id) ? 'bg-blue-400' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
+                  onClick={(_) => {
                     console.log('clicked on', id);
                     nodeInteractionHandler(id);
                   }}

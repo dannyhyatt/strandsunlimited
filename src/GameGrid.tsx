@@ -1,7 +1,16 @@
 import { MouseEventHandler, useEffect, useState } from "react";
 
+interface CirclePosition {
+  id: string;
+  pos: [number, number];
+}
 
-export const circlePositions = [
+interface Line {
+  ids: string[];
+  color: string;
+}
+
+export const circlePositions: CirclePosition[] = [
   { id: "1-1", pos: [25, 25] },
   { id: "1-2", pos: [75, 25] },
   { id: "1-3", pos: [125, 25] },
@@ -52,66 +61,45 @@ export const circlePositions = [
   { id: "8-6", pos: [275, 375] },
 ];
 
+export const toFromToArray = (ids: string[]) => {
+  const arr = [];
+  for(let i = 0; i < ids.length - 1; i++) {
+    arr.push({ from: ids[i], to: ids[i + 1] });
+  }
+  return arr;
+}
+
 export default function SVGGrid({
   addNewLine,
   removeLineByIndex,
   deselectOnNewLine = true,
-  padding = defaultSizingOptions.padding,
   lines = []
 }: {
   addNewLine: (line: { from: string; to: string }) => void;
   removeLineByIndex: (idx: number) => void;
   deselectOnNewLine?: boolean;
   padding?: number;
-  lines?: { from: string; to: string }[];
+  lines?: Line[];
 
 }) {
-  const [svgSize, setSVGSize] = useState(() => getSVGSize(padding));
-  const [newLineSource, setNewLineSource] = useState<string | null>(null);
 
-  useEffect(() => {
-    const resizeListener = () => setSVGSize(getSVGSize(padding));
-    window.addEventListener("resize", resizeListener);
-    return window.removeEventListener("resize", () => resizeListener);
-  }, [padding]);
-
-  const circleRadius = 5;
+  const toIndividualLines = (lines: Line[]) => lines.map((line) => {
+    return toFromToArray(line.ids);
+  });
 
   const getCirclePositionById = (id: string) =>
     circlePositions.find((cPos) => cPos.id === id)?.pos;
-
-  const handleBackgroundClick: MouseEventHandler = (_) => {
-    setNewLineSource(null);
-  };
-
-  // dunno what type e should be here
-  const handleCircleClick = (e: any, circleId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (newLineSource && circleId !== newLineSource) {
-      addNewLine({ from: newLineSource, to: circleId });
-      if (deselectOnNewLine) {
-        setNewLineSource(null);
-      }
-    } else if (!newLineSource) {
-      setNewLineSource(circleId);
-    } else {
-      setNewLineSource(null);
-    }
-  };
 
   return (
     <svg
       viewBox="0 0 300 400"
       width={''}
       height={''}
-      onClick={handleBackgroundClick}
     >
       {/* draw fixed circles */}
 
       {/* draw user provided lines */}
-      {lines.map((line, idx) => {
+      {toIndividualLines(lines).flat().map((line, idx) => {
         const sourcePos = getCirclePositionById(line.from);
         const targetPos = getCirclePositionById(line.to);
         if (!sourcePos || !targetPos) {
@@ -139,10 +127,3 @@ export default function SVGGrid({
     </svg>
   );
 }
-
-
-const defaultSizingOptions = {
-  padding: 30,
-  maxSize: 400
-};
-const getSVGSize = (padding: any) => Math.min(400, window.innerWidth - 2 * padding);
