@@ -143,7 +143,6 @@ export default function Game({ data } : { data: GameData }) {
                         setDragging(true);
                       }, 200);
                       setTimeoutRef(newTimeoutRef);
-                      nodeInteractionHandler(id);
                     }
                   }}
                   onMouseEnter={(e) => {
@@ -155,6 +154,8 @@ export default function Game({ data } : { data: GameData }) {
                   onMouseUp={() => {
                     if (!dragging && currentLine.length > 1 && currentLine[currentLine.length - 1] == id) {
                       submitLine();
+                    } else {
+                      nodeInteractionHandler(id)
                     }
                   }}
                 >
