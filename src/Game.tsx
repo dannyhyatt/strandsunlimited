@@ -10,6 +10,9 @@ export default function Game({ data } : { data: GameData }) {
     { from: "2-1", to: "2-2" },
   ]);
 
+  const [timeoutRef, setTimeoutRef] = useState<number | null>(null);
+  const [dragging, setDragging] = useState<boolean>(false);
+
   const [foundLines, setFoundLines] = useState<string[][]>([]);
 
   // array of all the node ids
@@ -100,7 +103,12 @@ export default function Game({ data } : { data: GameData }) {
       <div 
         className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8"
         onMouseUp={(_) => {
-          if(currentLine.length > 1) {
+          if (timeoutRef) {
+            clearTimeout(timeoutRef);
+            setTimeoutRef(null);
+            // setDragging(false)
+          }
+          if(currentLine.length > 1 && dragging) {
             submitLine();
           }
         
@@ -125,6 +133,16 @@ export default function Game({ data } : { data: GameData }) {
                   onMouseDown={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged start', id);
+                      setDragging(false);
+                      if (timeoutRef != null) {
+                        clearTimeout(timeoutRef);
+                        setTimeoutRef(null);
+                      }
+                      const newTimeoutRef = setTimeout(() => {
+                        setTimeoutRef(null);
+                        setDragging(true);
+                      }, 200);
+                      setTimeoutRef(newTimeoutRef);
                       nodeInteractionHandler(id);
                     }
                   }}
@@ -132,6 +150,11 @@ export default function Game({ data } : { data: GameData }) {
                     if(e.buttons === 1) {
                       console.log('dragged over', id);
                       nodeInteractionHandler(id);
+                    }
+                  }}
+                  onMouseUp={() => {
+                    if (!dragging && currentLine.length > 1 && currentLine[currentLine.length - 1] == id) {
+                      submitLine();
                     }
                   }}
                 >
