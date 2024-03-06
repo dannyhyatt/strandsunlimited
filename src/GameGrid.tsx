@@ -1,5 +1,57 @@
 import { MouseEventHandler, useEffect, useState } from "react";
 
+
+export const circlePositions = [
+  { id: "1-1", pos: [25, 25] },
+  { id: "1-2", pos: [75, 25] },
+  { id: "1-3", pos: [125, 25] },
+  { id: "1-4", pos: [175, 25] },
+  { id: "1-5", pos: [225, 25] },
+  { id: "1-6", pos: [275, 25] },
+  { id: "2-1", pos: [25, 75] },
+  { id: "2-2", pos: [75, 75] },
+  { id: "2-3", pos: [125, 75] },
+  { id: "2-4", pos: [175, 75] },
+  { id: "2-5", pos: [225, 75] },
+  { id: "2-6", pos: [275, 75] },
+  { id: "3-1", pos: [25, 125] },
+  { id: "3-2", pos: [75, 125] },
+  { id: "3-3", pos: [125, 125] },
+  { id: "3-4", pos: [175, 125] },
+  { id: "3-5", pos: [225, 125] },
+  { id: "3-6", pos: [275, 125] },
+  { id: "4-1", pos: [25, 175] },
+  { id: "4-2", pos: [75, 175] },
+  { id: "4-3", pos: [125, 175] },
+  { id: "4-4", pos: [175, 175] },
+  { id: "4-5", pos: [225, 175] },
+  { id: "4-6", pos: [275, 175] },
+  { id: "5-1", pos: [25, 225] },
+  { id: "5-2", pos: [75, 225] },
+  { id: "5-3", pos: [125, 225] },
+  { id: "5-4", pos: [175, 225] },
+  { id: "5-5", pos: [225, 225] },
+  { id: "5-6", pos: [275, 225] },
+  { id: "6-1", pos: [25, 275] },
+  { id: "6-2", pos: [75, 275] },
+  { id: "6-3", pos: [125, 275] },
+  { id: "6-4", pos: [175, 275] },
+  { id: "6-5", pos: [225, 275] },
+  { id: "6-6", pos: [275, 275] },
+  { id: "7-1", pos: [25, 325] },
+  { id: "7-2", pos: [75, 325] },
+  { id: "7-3", pos: [125, 325] },
+  { id: "7-4", pos: [175, 325] },
+  { id: "7-5", pos: [225, 325] },
+  { id: "7-6", pos: [275, 325] },
+  { id: "8-1", pos: [25, 375] },
+  { id: "8-2", pos: [75, 375] },
+  { id: "8-3", pos: [125, 375] },
+  { id: "8-4", pos: [175, 375] },
+  { id: "8-5", pos: [225, 375] },
+  { id: "8-6", pos: [275, 375] },
+];
+
 export default function SVGGrid({
   addNewLine,
   removeLineByIndex,
@@ -24,56 +76,6 @@ export default function SVGGrid({
   }, [padding]);
 
   const circleRadius = 5;
-  const circlePositions = [
-    { id: "1-1", pos: [10, 10] },
-    { id: "1-2", pos: [50, 10] },
-    { id: "1-3", pos: [100, 10] },
-    { id: "1-4", pos: [150, 10] },
-    { id: "1-5", pos: [200, 10] },
-    { id: "1-6", pos: [250, 10] },
-    { id: "2-1", pos: [10, 50] },
-    { id: "2-2", pos: [50, 50] },
-    { id: "2-3", pos: [100, 50] },
-    { id: "2-4", pos: [150, 50] },
-    { id: "2-5", pos: [200, 50] },
-    { id: "2-6", pos: [250, 50] },
-    { id: "3-1", pos: [10, 100] },
-    { id: "3-2", pos: [50, 100] },
-    { id: "3-3", pos: [100, 100] },
-    { id: "3-4", pos: [150, 100] },
-    { id: "3-5", pos: [200, 100] },
-    { id: "3-6", pos: [250, 100] },
-    { id: "4-1", pos: [10, 150] },
-    { id: "4-2", pos: [50, 150] },
-    { id: "4-3", pos: [100, 150] },
-    { id: "4-4", pos: [150, 150] },
-    { id: "4-5", pos: [200, 150] },
-    { id: "4-6", pos: [250, 150] },
-    { id: "5-1", pos: [10, 200] },
-    { id: "5-2", pos: [50, 200] },
-    { id: "5-3", pos: [100, 200] },
-    { id: "5-4", pos: [150, 200] },
-    { id: "5-5", pos: [200, 200] },
-    { id: "5-6", pos: [250, 200] },
-    { id: "6-1", pos: [10, 250] },
-    { id: "6-2", pos: [50, 250] },
-    { id: "6-3", pos: [100, 250] },
-    { id: "6-4", pos: [150, 250] },
-    { id: "6-5", pos: [200, 250] },
-    { id: "6-6", pos: [250, 250] },
-    { id: "7-1", pos: [10, 300] },
-    { id: "7-2", pos: [50, 300] },
-    { id: "7-3", pos: [100, 300] },
-    { id: "7-4", pos: [150, 300] },
-    { id: "7-5", pos: [200, 300] },
-    { id: "7-6", pos: [250, 300] },
-    { id: "8-1", pos: [10, 350] },
-    { id: "8-2", pos: [50, 350] },
-    { id: "8-3", pos: [100, 350] },
-    { id: "8-4", pos: [150, 350] },
-    { id: "8-5", pos: [200, 350] },
-    { id: "8-6", pos: [250, 350] },
-  ];
 
   const getCirclePositionById = (id: string) =>
     circlePositions.find((cPos) => cPos.id === id)?.pos;
@@ -102,27 +104,12 @@ export default function SVGGrid({
   return (
     <svg
       viewBox="0 0 300 400"
-      width={svgSize}
-      height={svgSize}
+      width={''}
+      height={''}
       onClick={handleBackgroundClick}
     >
       {/* draw fixed circles */}
-      {circlePositions.map(({ id, pos }) => (
-        <circle
-          key={id}
-          id={`SVGGrid-circle-${id}`}
-          className={[
-            "SVGGrid-circle",
-            id === newLineSource && "SVGGrid-circle-active"
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={(e) => handleCircleClick(e, id)}
-          cx={pos[0]}
-          cy={pos[1]}
-          r={circleRadius}
-        />
-      ))}
+
       {/* draw user provided lines */}
       {lines.map((line, idx) => {
         const sourcePos = getCirclePositionById(line.from);
@@ -141,6 +128,7 @@ export default function SVGGrid({
             key={`SVGGrid-line-${idx}`}
             className="SVGGrid-line"
             onClick={(_) => removeLineByIndex(idx)}
+            strokeWidth={4}
             x1={sourcePos[0]}
             y1={sourcePos[1]}
             x2={targetPos[0]}
