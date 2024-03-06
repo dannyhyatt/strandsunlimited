@@ -129,7 +129,7 @@ export default function Game({ data } : { data: GameData }) {
                 className="cursor-pointer flex"
               >
                 <span
-                  className={`${currentLine.includes(id) ? 'bg-slate-400' : foundLines.flat().includes(id) ? 'bg-blue-400' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
+                  className={`letter-opt${currentLine.includes(id) ? ' selected' : foundLines.flat().includes(id) ? ' found' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
                   onMouseDown={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged start', id);
