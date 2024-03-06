@@ -2,14 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .SVGGrid-circle {
   fill: navy;
   stroke: navy;
 }
 
-
-.SVGGrid-circle:hover, .SVGGrid-circle:active {
+.SVGGrid-circle:hover,
+.SVGGrid-circle:active {
   fill: blue;
 }
 
@@ -21,4 +20,24 @@
 .SVGGrid-line:hover {
   fill: red;
   stroke: red;
+}
+
+.hint-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  height: 46px;
+  width: 150px;
+  border: 2px solid #ccc;
+  font-weight: bold;
+  color: #ccc;
+  font-size: 18px;
+  margin: 0px auto;
+  cursor: pointer;
+  transition: scale 0.3s;
+}
+
+.hint-btn:active {
+  scale: 0.9;
 }
