@@ -133,29 +133,27 @@ export default function Game({ data } : { data: GameData }) {
                   onMouseDown={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged start', id);
-                      setDragging(false);
-                      if (timeoutRef != null) {
-                        clearTimeout(timeoutRef);
-                        setTimeoutRef(null);
+                      if (!dragging && currentLine.length > 1 && currentLine[currentLine.length - 1] == id) {
+                        submitLine();
+                      } else {
+                        setDragging(false);
+                        if (timeoutRef != null) {
+                          clearTimeout(timeoutRef);
+                          setTimeoutRef(null);
+                        }
+                        const newTimeoutRef = setTimeout(() => {
+                          setTimeoutRef(null);
+                          setDragging(true);
+                        }, 200);
+                        setTimeoutRef(newTimeoutRef);
+                        nodeInteractionHandler(id);
                       }
-                      const newTimeoutRef = setTimeout(() => {
-                        setTimeoutRef(null);
-                        setDragging(true);
-                      }, 200);
-                      setTimeoutRef(newTimeoutRef);
                     }
                   }}
                   onMouseEnter={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged over', id);
                       nodeInteractionHandler(id);
-                    }
-                  }}
-                  onMouseUp={() => {
-                    if (!dragging && currentLine.length > 1 && currentLine[currentLine.length - 1] == id) {
-                      submitLine();
-                    } else {
-                      nodeInteractionHandler(id)
                     }
                   }}
                 >
