@@ -52,7 +52,9 @@ export default function Game({ data } : { data: GameData }) {
 
   const nodeInteractionHandler = (id: string) => {
     // check to see if it's a valid move
-    if(
+    if (currentLine.length == 1 && currentLine[0] == id) {
+      setCurrentLine([])
+    } else if(
       currentLine.length > 0 && 
       isNeighbor(currentLine[currentLine.length - 1], id) && 
       !currentLine.includes(id)
@@ -120,10 +122,6 @@ export default function Game({ data } : { data: GameData }) {
               >
                 <span
                   className={`${currentLine.includes(id) ? 'bg-slate-400' : foundLines.flat().includes(id) ? 'bg-blue-400' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
-                  onClick={(_) => {
-                    console.log('clicked on', id);
-                    nodeInteractionHandler(id);
-                  }}
                   onMouseDown={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged start', id);
