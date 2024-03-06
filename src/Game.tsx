@@ -13,6 +13,20 @@ export default function Game({ data } : { data: GameData }) {
   // array of all the node ids
   const [currentLine, setCurrentLine] = useState<string[]>([]);
 
+  const getStringFromIds = (ids: string[]) => {
+    return ids.map((id) => getLetterFromId(id)).join('');
+  }
+
+  const getLetterFromId = (id: string) => {
+    for(let i = 0; i < data.positions.length; i++) {
+      const j = data.positions[i].indexOf(id);
+      if(j !== -1) {
+        return data.words[i][j];
+      }
+    }
+    return '-'; // so we know if something went wrong
+  }
+
   const toFromToArray = (ids: string[]) => {
     const arr = [];
     for(let i = 0; i < ids.length - 1; i++) {
@@ -53,6 +67,11 @@ export default function Game({ data } : { data: GameData }) {
   }
 
   return (
+    <>
+    <span className="text-xl">
+      {/* add a space before and after so the height stays constant */}
+      {'\u00A0'}{getStringFromIds(currentLine)}{'\u00A0'}
+    </span>
     <div className="relative">
 
       <SVGGrid
@@ -63,15 +82,31 @@ export default function Game({ data } : { data: GameData }) {
         }
       />
       
-      <div className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8">
-        {circlePositions.map(({ id, pos }) => (
+      <div 
+        className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8"
+        onMouseUp={(e) => {
+          if(currentLine.length > 1) {
+            setCurrentLine([]);
+          }
+        
+        }}
+      >
+        {/* this is basically the ugliest nested for loop ever */}
+        {data.positions.map((ids, i) => {
+
+          // id refers to the position id here
+          return ids.map((id, j) => {
+
+            const letter = data.words[i][j];
+
+            return (
               <span
                 key={`grid-${id}`}
                 style={{ gridRow: id[0], gridColumn: id[2] }}
                 className="cursor-pointer flex"
               >
                 <span
-                  className="bg-slate-400 rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none"
+                  className={`${currentLine.includes(id) ? 'bg-slate-400' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
                   onClick={(e) => {
                     console.log('clicked on', id);
                     nodeInteractionHandler(id);
@@ -89,13 +124,17 @@ export default function Game({ data } : { data: GameData }) {
                     }
                   }}
                 >
-                  {id}
+                  {letter}
                 </span>
               </span>
-          ))}
+          );
+          });
+          
+      }).flat()}
       </div>
 
     </div>
+    </>
   );
 
 }
