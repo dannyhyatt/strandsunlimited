@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.SVGGrid-circle {
+  fill: navy;
+  stroke: navy;
+}
+
+
+.SVGGrid-circle:hover, .SVGGrid-circle:active {
+  fill: blue;
+}
+
+.SVGGrid-line {
+  fill: navy;
+  stroke: navy;
+}
+
+.SVGGrid-line:hover {
+  fill: red;
+  stroke: red;
+}
