@@ -23,6 +23,9 @@
 
 .letter-opt.selected {
   background-color: rgb(148 163 184);
+  animation-name: circle-click;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
 }
 
 .letter-opt.found {
@@ -31,13 +34,13 @@
 
 @keyframes circle-click {
   0% {
-    scale: 1
+    scale: 1;
   }
   50% {
-    scale: 0.8
+    scale: 0.8;
   }
   100% {
-    scale: 1
+    scale: 1;
   }
 }
 
