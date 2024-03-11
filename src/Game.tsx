@@ -87,7 +87,7 @@ export default function Game({ data } : { data: GameData }) {
       {/* add a space before and after so the height stays constant */}
       {'\u00A0'}{displayText}{'\u00A0'}
     </span>
-    <div className="relative">
+    <div className="relative touch-none">
 
       <SVGGrid
         lines={[
@@ -159,6 +159,28 @@ export default function Game({ data } : { data: GameData }) {
                       console.log('dragged over', id);
                       nodeInteractionHandler(id);
                     }
+                  }}
+                  onPointerEnter={(e) => {
+                    console.log('touched over', id);
+                    nodeInteractionHandler(id);
+                  }}
+                  onPointerDown={(e) => {
+                    console.log('dragged start', id);
+                      if (!dragging && currentLine.length > 1 && currentLine[currentLine.length - 1] == id) {
+                        submitLine();
+                      } else {
+                        setDragging(false);
+                        if (timeoutRef != null) {
+                          clearTimeout(timeoutRef);
+                          setTimeoutRef(null);
+                        }
+                        const newTimeoutRef = setTimeout(() => {
+                          setTimeoutRef(null);
+                          setDragging(true);
+                        }, 200);
+                        setTimeoutRef(newTimeoutRef);
+                        nodeInteractionHandler(id);
+                      }
                   }}
                 >
                   {letter}
