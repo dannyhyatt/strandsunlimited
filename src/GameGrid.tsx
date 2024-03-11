@@ -1,4 +1,3 @@
-import { MouseEventHandler, useEffect, useState } from "react";
 
 interface CirclePosition {
   id: string;
@@ -70,7 +69,6 @@ export const toFromToArray = (ids: string[], color: string) => {
 }
 
 export default function SVGGrid({
-  deselectOnNewLine = true,
   lines = []
 }: {
   deselectOnNewLine?: boolean;

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import Game from "./Game";
 import { defaultGameData } from "./GameData";
@@ -6,7 +5,6 @@ import { defaultGameData } from "./GameData";
 const gameData = defaultGameData;
 
 function App() {
-  const [count, setCount] = useState(0);
 
   return (
     <>

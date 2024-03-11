@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { GameData } from "./GameData";
-import SVGGrid, { circlePositions, toFromToArray } from "./GameGrid";
+import SVGGrid from "./GameGrid";
 
 
 export default function Game({ data } : { data: GameData }) {
-
-  const [lines, setLines] = useState([
-    { from: "1-1", to: "1-2" },
-    { from: "2-1", to: "2-2" },
-  ]);
 
   const [timeoutRef, setTimeoutRef] = useState<number | null>(null);
   const [dragging, setDragging] = useState<boolean>(false);
