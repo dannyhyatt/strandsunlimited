@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .SVGGrid-circle {
   fill: navy;
   stroke: navy;
@@ -32,6 +40,10 @@
   background-color: rgb(96 165 250);
 }
 
+.letter-opt.found.spanagram {
+  background-color: rgb(219, 223, 97);
+}
+
 @keyframes circle-click {
   0% {
     scale: 1;
@@ -42,6 +54,32 @@
   100% {
     scale: 1;
   }
+}
+
+@keyframes wrong-answer-shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(10px);
+  }
+  60% {
+    transform: translateX(-10px);
+  }
+  80% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.wrong-answer {
+  animation-name: wrong-answer-shake;
+  animation-duration: 0.8s;
 }
 
 .SVGGrid-line:hover {

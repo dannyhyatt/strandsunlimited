@@ -18,11 +18,19 @@ export default function Game({ data } : { data: GameData }) {
   // array of all the node ids
   const [currentLine, setCurrentLine] = useState<string[]>([]);
 
+  const [displayText, setDisplayText] = useState<string>('');
+
   console.log('currentLine', currentLine);
 
   const submitLine = () => {
-    if(data.positions.some((ids) => ids.every((id,i) => currentLine.length > i && currentLine[i] === id)))
+    if(data.positions.some((ids) => ids.every((id,i) => currentLine.length > i && currentLine[i] === id))) {
       setFoundLines([...foundLines, currentLine]);
+      setDisplayText('');
+    } else {
+      setTimeout(() => {
+        setDisplayText('');
+      }, 1000);
+    }
     setCurrentLine([]);
   }
 
@@ -57,27 +65,32 @@ export default function Game({ data } : { data: GameData }) {
     // check to see if it's a valid move
     if (currentLine.length == 1 && currentLine[0] == id) {
       setCurrentLine([])
+      setDisplayText('');
     } else if(
       currentLine.length > 0 && 
       isNeighbor(currentLine[currentLine.length - 1], id) && 
       !currentLine.includes(id)
     ) {
       setCurrentLine([...currentLine, id]);
+      setDisplayText(getStringFromIds([...currentLine, id]));
     } else if(
       currentLine.length > 1 &&
       currentLine.includes(id)
     ) {
       setCurrentLine(currentLine.slice(0, currentLine.indexOf(id) + 1));
+      setDisplayText(getStringFromIds(currentLine.slice(0, currentLine.indexOf(id) + 1)));
     } else {
       setCurrentLine([id]);
+      setDisplayText(getLetterFromId(id));
     }
+
   }
 
   return (
     <>
-    <span className="text-xl">
+    <span className={`text-xl font-bold ${displayText.length != currentLine.length && 'wrong-answer'}`}>
       {/* add a space before and after so the height stays constant */}
-      {'\u00A0'}{getStringFromIds(currentLine)}{'\u00A0'}
+      {'\u00A0'}{displayText}{'\u00A0'}
     </span>
     <div className="relative">
 
@@ -85,23 +98,19 @@ export default function Game({ data } : { data: GameData }) {
         lines={[
           {
             ids: currentLine,
-            color: 'red'
+            color: 'rgb(148 163 184)' // taken from the css file
           },
           ...foundLines.map((line) => {
             return {
               ids: line,
-              color: 'green'
+              color: data.positions[0].every((id,i) => line.length > i && line[i] === id) ? 'rgb(219, 223, 97)' : 'rgb(96 165 250)'
             }
           })
         ]}
-        addNewLine={(newLine) => setLines((lines) => [...lines, newLine])}
-        removeLineByIndex={(lineIdx) =>
-          setLines([...lines.slice(0, lineIdx), ...lines.slice(lineIdx + 1)])
-        }
       />
       
       <div 
-        className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8"
+        className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8 "
         onMouseUp={(_) => {
           if (timeoutRef) {
             clearTimeout(timeoutRef);
@@ -126,10 +135,10 @@ export default function Game({ data } : { data: GameData }) {
               <span
                 key={`grid-${id}`}
                 style={{ gridRow: id[0], gridColumn: id[2] }}
-                className="cursor-pointer flex"
+                className={`cursor-pointer flex ${currentLine.length > 1 && !dragging && currentLine[currentLine.length - 1] == id ? 'border-2 border-[rgb(148,163,184)] rounded-full' : ''}`}
               >
                 <span
-                  className={`letter-opt${currentLine.includes(id) ? ' selected' : foundLines.flat().includes(id) ? ' found' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
+                  className={`letter-opt${currentLine.includes(id) ? ' selected' : foundLines.flat().includes(id) ? data.positions[0].includes(id) ? ' spanagram found' : ' found' : ''} rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
                   onMouseDown={(e) => {
                     if(e.buttons === 1) {
                       console.log('dragged start', id);
@@ -167,6 +176,17 @@ export default function Game({ data } : { data: GameData }) {
       </div>
 
     </div>
+
+    <div className={`fixed top-0 right-0 left-0 bottom-0 ${foundLines.length != data.words.length && 'hidden'} bg-black bg-opacity-25`}>
+      <div className="flex justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center bg-white p-4 rounded-lg">
+          <h1 className="text-3xl">You Win!</h1>
+          <p>You found all the words!</p>
+          think about what you've done
+        </div>
+      </div>
+    </div>
+
     </>
   );
 

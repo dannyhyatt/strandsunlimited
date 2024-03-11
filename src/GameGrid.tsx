@@ -61,22 +61,18 @@ export const circlePositions: CirclePosition[] = [
   { id: "8-6", pos: [275, 375] },
 ];
 
-export const toFromToArray = (ids: string[]) => {
+export const toFromToArray = (ids: string[], color: string) => {
   const arr = [];
   for(let i = 0; i < ids.length - 1; i++) {
-    arr.push({ from: ids[i], to: ids[i + 1] });
+    arr.push({ from: ids[i], to: ids[i + 1], color });
   }
   return arr;
 }
 
 export default function SVGGrid({
-  addNewLine,
-  removeLineByIndex,
   deselectOnNewLine = true,
   lines = []
 }: {
-  addNewLine: (line: { from: string; to: string }) => void;
-  removeLineByIndex: (idx: number) => void;
   deselectOnNewLine?: boolean;
   padding?: number;
   lines?: Line[];
@@ -84,7 +80,7 @@ export default function SVGGrid({
 }) {
 
   const toIndividualLines = (lines: Line[]) => lines.map((line) => {
-    return toFromToArray(line.ids);
+    return toFromToArray(line.ids, line.color);
   });
 
   const getCirclePositionById = (id: string) =>
@@ -93,8 +89,8 @@ export default function SVGGrid({
   return (
     <svg
       viewBox="0 0 300 400"
-      width={''}
-      height={''}
+      width={'100%'}
+      height={'100%'}
     >
       {/* draw fixed circles */}
 
@@ -114,9 +110,10 @@ export default function SVGGrid({
         return (
           <line
             key={`SVGGrid-line-${idx}`}
-            className="SVGGrid-line"
-            onClick={(_) => removeLineByIndex(idx)}
-            strokeWidth={4}
+            stroke={line.color}
+            fill={line.color}
+            // className="SVGGrid-line"
+            strokeWidth={8}
             x1={sourcePos[0]}
             y1={sourcePos[1]}
             x2={targetPos[0]}

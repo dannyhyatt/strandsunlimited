@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <div className="flex min-h-screen justify-center gap-8">
+      <div className="flex justify-center flex-wrap gap-x-8">
         <div className="flex flex-col justify-center gap-4">
           <h1 className="text-3xl">Strands Unlimited</h1>
           <span className="flex flex-col border-2 rounded-lg">
