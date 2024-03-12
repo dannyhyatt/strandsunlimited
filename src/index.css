@@ -88,6 +88,15 @@
   stroke: red;
 }
 
+.hint-cont {
+  position: relative;
+  margin: 0px auto;
+  cursor: pointer;
+  transition: scale 0.3s;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .hint-btn {
   display: flex;
   align-items: center;
@@ -96,14 +105,29 @@
   height: 46px;
   width: 150px;
   border: 2px solid #ccc;
-  font-weight: bold;
   color: #ccc;
-  font-size: 18px;
-  margin: 0px auto;
-  cursor: pointer;
-  transition: scale 0.3s;
 }
 
-.hint-btn:active {
+.hint-cont:active {
   scale: 0.9;
 }
+
+.hint-btn-overlay {
+  overflow: hidden;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.hint-btn-o-inner {
+  border: 2px solid black;
+  color: black;
+  height: 46px;
+  width: 150px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd;
+}
+

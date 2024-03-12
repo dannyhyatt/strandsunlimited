@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { GameData } from "./GameData";
 import SVGGrid from "./GameGrid";
+import { Dictionary } from "./Dictionary";
+
 
 
 export default function Game({ data } : { data: GameData }) {
+
+  const dictionary = new Dictionary();
+
 
   const [timeoutRef, setTimeoutRef] = useState<number | null>(null);
   const [dragging, setDragging] = useState<boolean>(false);
@@ -15,6 +20,8 @@ export default function Game({ data } : { data: GameData }) {
 
   const [displayText, setDisplayText] = useState<string>('');
 
+  const [hintProgress, setHintProgress] = useState<number>(0);
+
   console.log('currentLine', currentLine);
 
   const submitLine = () => {
@@ -22,6 +29,11 @@ export default function Game({ data } : { data: GameData }) {
       setFoundLines([...foundLines, currentLine]);
       setDisplayText('');
     } else {
+      if (dictionary.isWord(displayText)) {
+        if (hintProgress < 3) {
+          setHintProgress(hintProgress + 1);
+        }
+      }
       setTimeout(() => {
         setDisplayText('');
       }, 1000);

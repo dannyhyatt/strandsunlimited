@@ -6,6 +6,9 @@ const gameData = defaultGameData;
 
 function App() {
 
+  const hintProgress = 1;
+
+
   return (
     <>
       <div className="flex justify-center flex-wrap gap-8">
@@ -18,7 +21,12 @@ function App() {
           <div>
             <b>0</b> of <b>7</b> theme words found.
           </div>
-          <button className="hint-btn">Hint</button>
+          <div className="hint-cont">
+            <button className="hint-btn">Hint</button>
+            <div className="hint-btn-overlay" style={{"width": `${(hintProgress / 3) * 150}px`}} >
+              <button className="hint-btn-o-inner">Hint</button>
+            </div>
+          </div>
         </div>
         <div className="flex flex-col justify-center gap-4">
           <Game data={gameData} />
