@@ -33,7 +33,12 @@ export default function Game({ data }: { data: GameData }) {
   const submitLine = () => {
     if (
       data.positions.some((ids) =>
-        ids.every((id, i) => currentLine.length > i && currentLine[i] === id)
+        // ids.every((id, i) => currentLine.length > i && currentLine[i] === id)
+        ids.length == currentLine.length &&
+        ids[0] === currentLine[0] &&
+        ids[ids.length - 1] === currentLine[currentLine.length - 1] &&
+        ids.every((id) => currentLine.includes(id)) && 
+        getStringFromIds(ids) === getStringFromIds(currentLine)
       )
     ) {
       setFoundLines([...foundLines, currentLine]);
