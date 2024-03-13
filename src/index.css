@@ -32,7 +32,7 @@
   align-items: center;
 }
 
-.letter-opt:not(.selected):not(.found):not(:hover).hint {
+.letter-opt:not(.selected):not(.found):not(.spanagram):not(:hover).hint {
   border: 2px dashed rgb(96 165 250);
 }
 

@@ -15,3 +15,8 @@ export const hintState = atom<string[]>({
   key: "hintState",
   default: [],
 });
+
+export const foundWords = atom<string[]>({
+  key: "foundWords",
+  default: [],
+});

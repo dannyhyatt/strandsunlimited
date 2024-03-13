@@ -7,6 +7,7 @@ import {
   hintProgressState,
   foundLinesState,
   hintState,
+  foundWords,
 } from "./atoms/gameState";
 
 export default function Game({ data }: { data: GameData }) {
@@ -17,6 +18,8 @@ export default function Game({ data }: { data: GameData }) {
 
   const [foundLines, setFoundLines] =
     useRecoilState<string[][]>(foundLinesState);
+
+  const [words, setFoundWords] = useRecoilState<string[]>(foundWords);
 
   const hints = useRecoilValue(hintState);
 
@@ -32,20 +35,24 @@ export default function Game({ data }: { data: GameData }) {
 
   const submitLine = () => {
     if (
-      data.positions.some((ids) =>
-        // ids.every((id, i) => currentLine.length > i && currentLine[i] === id)
-        ids.length == currentLine.length &&
-        ids[0] === currentLine[0] &&
-        ids[ids.length - 1] === currentLine[currentLine.length - 1] &&
-        ids.every((id) => currentLine.includes(id)) && 
-        getStringFromIds(ids) === getStringFromIds(currentLine)
+      data.positions.some(
+        (ids) =>
+          // ids.every((id, i) => currentLine.length > i && currentLine[i] === id)
+          ids.length == currentLine.length &&
+          ids[0] === currentLine[0] &&
+          ids[ids.length - 1] === currentLine[currentLine.length - 1] &&
+          ids.every((id) => currentLine.includes(id)) &&
+          getStringFromIds(ids) === getStringFromIds(currentLine)
       )
     ) {
       setFoundLines([...foundLines, currentLine]);
+      if (!words.includes(displayText))
+        setFoundWords(words.concat([displayText]));
       setDisplayText("");
     } else {
-      if (dictionary.isWord(displayText)) {
+      if (!words.includes(displayText) && dictionary.isWord(displayText)) {
         if (hintProgress < 3) {
+          setFoundWords(words.concat([displayText]));
           setHintProgress(hintProgress + 1);
         }
       }

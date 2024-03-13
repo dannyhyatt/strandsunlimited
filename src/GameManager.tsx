@@ -4,23 +4,37 @@ import Game from "./Game";
 import { defaultGameData } from "./GameData";
 import {
   foundLinesState,
+  foundWords,
   hintProgressState,
   hintState,
 } from "./atoms/gameState";
+import { useState } from "react";
 
 const gameData = defaultGameData;
 
 function App() {
-  const hintProgress = useRecoilValue(hintProgressState);
+  const [hintProgress, setHintProgress] = useRecoilState(hintProgressState);
 
   const found = useRecoilValue(foundLinesState);
+  const words = useRecoilValue(foundWords);
+
+  const [usedHints, setUsedHints] = useState<string[]>([]);
 
   const [hints, setHintState] = useRecoilState(hintState);
 
   const activateHint = () => {
-    const hintVals = gameData.positions[0];
-    console.log(hintVals);
-    setHintState(hints.concat(hintVals));
+    if (hintProgress >= 3) {
+      const ind = gameData.words.findIndex(
+        (x) => !words.includes(x) && !usedHints.includes(x)
+      );
+      if (ind != -1) {
+        const hintVals = gameData.positions[ind];
+        const hintWord = gameData.words[ind];
+        setUsedHints(usedHints.concat([hintWord]));
+        setHintState(hints.concat(hintVals));
+        setHintProgress(hintProgress - 3);
+      }
+    }
   };
 
   return (
@@ -32,7 +46,8 @@ function App() {
           <h2 className="text-xl my-2">{defaultGameData.theme}</h2>
         </span>
         <div>
-          <b>{found.length}</b> of <b>7</b> theme words found.
+          <b>{found.length}</b> of <b>{gameData.words.length}</b> theme words
+          found.
         </div>
         <div className="hint-cont" onClick={activateHint}>
           <button className="hint-btn">Hint</button>
