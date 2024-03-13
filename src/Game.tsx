@@ -2,8 +2,12 @@ import { useState } from "react";
 import { GameData } from "./GameData";
 import SVGGrid from "./GameGrid";
 import { Dictionary } from "./Dictionary";
-import { useRecoilState } from "recoil";
-import { hintProgressState, foundLinesState } from "./atoms/gameState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  hintProgressState,
+  foundLinesState,
+  hintState,
+} from "./atoms/gameState";
 
 export default function Game({ data }: { data: GameData }) {
   const dictionary = new Dictionary();
@@ -13,6 +17,8 @@ export default function Game({ data }: { data: GameData }) {
 
   const [foundLines, setFoundLines] =
     useRecoilState<string[][]>(foundLinesState);
+
+  const hints = useRecoilValue(hintState);
 
   // array of all the node ids
   const [currentLine, setCurrentLine] = useState<string[]>([]);
@@ -167,8 +173,8 @@ export default function Game({ data }: { data: GameData }) {
                           ? data.positions[0].includes(id)
                             ? " spanagram found"
                             : " found"
-                          : ""
-                      } rounded-full h-8 w-8 pt-1 m-auto block cursor-pointer select-none`}
+                          : "" + (hints.includes(id) ? " hint" : "")
+                      } rounded-full h-8 w-8 m-auto block cursor-pointer select-none`}
                       onMouseDown={(e) => {
                         if (e.buttons === 1) {
                           //console.log("dragged start", id);

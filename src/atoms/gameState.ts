@@ -10,3 +10,8 @@ export const foundLinesState = atom<string[][]>({
   key: "foundLinesState",
   default: [],
 });
+
+export const hintState = atom<string[]>({
+  key: "hintState",
+  default: [],
+});

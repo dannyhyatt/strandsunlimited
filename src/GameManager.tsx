@@ -1,8 +1,12 @@
 import "./App.css";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import Game from "./Game";
 import { defaultGameData } from "./GameData";
-import { foundLinesState, hintProgressState } from "./atoms/gameState";
+import {
+  foundLinesState,
+  hintProgressState,
+  hintState,
+} from "./atoms/gameState";
 
 const gameData = defaultGameData;
 
@@ -10,6 +14,14 @@ function App() {
   const hintProgress = useRecoilValue(hintProgressState);
 
   const found = useRecoilValue(foundLinesState);
+
+  const [hints, setHintState] = useRecoilState(hintState);
+
+  const activateHint = () => {
+    const hintVals = gameData.positions[0];
+    console.log(hintVals);
+    setHintState(hints.concat(hintVals));
+  };
 
   return (
     <div className="flex justify-center flex-wrap gap-8">
@@ -22,7 +34,7 @@ function App() {
         <div>
           <b>{found.length}</b> of <b>7</b> theme words found.
         </div>
-        <div className="hint-cont">
+        <div className="hint-cont" onClick={activateHint}>
           <button className="hint-btn">Hint</button>
           <div
             className="hint-btn-overlay"

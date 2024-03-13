@@ -26,6 +26,16 @@
   stroke: navy;
 }
 
+.letter-opt {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.letter-opt:not(.selected):not(.found):not(:hover).hint {
+  border: 2px dashed rgb(96 165 250);
+}
+
 .letter-opt:hover {
   background-color: rgba(148, 163, 184, 0.5);
 }
@@ -130,4 +140,3 @@
   justify-content: center;
   background-color: #ddd;
 }
-
