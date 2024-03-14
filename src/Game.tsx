@@ -15,6 +15,7 @@ export default function Game({ data }: { data: GameData }) {
 
   const [timeoutRef, setTimeoutRef] = useState<number | null>(null);
   const [dragging, setDragging] = useState<boolean>(false);
+  const [downId, setDownId] = useState<string>('');
 
   const [foundLines, setFoundLines] =
     useRecoilState<string[][]>(foundLinesState);
@@ -147,7 +148,7 @@ export default function Game({ data }: { data: GameData }) {
 
         <div
           className="absolute top-0 left-0 w-full h-full grid grid-cols-6 grid-rows-8 "
-          onMouseUp={(_) => {
+          onPointerUp={(_) => {
             if (timeoutRef) {
               clearTimeout(timeoutRef);
               setTimeoutRef(null);
@@ -187,61 +188,84 @@ export default function Game({ data }: { data: GameData }) {
                             : " found"
                           : "" + (hints.includes(id) ? " hint" : "")
                       } rounded-full h-8 w-8 m-auto block cursor-pointer select-none`}
-                      onMouseDown={(e) => {
-                        if (e.buttons === 1) {
-                          //console.log("dragged start", id);
-                          if (
-                            !dragging &&
-                            currentLine.length > 1 &&
-                            currentLine[currentLine.length - 1] == id
-                          ) {
+                      // onMouseDown={(e) => {
+                      //   if (e.buttons === 1) {
+                      //     //console.log("dragged start", id);
+                      //     if (
+                      //       !dragging &&
+                      //       currentLine.length > 1 &&
+                      //       currentLine[currentLine.length - 1] == id
+                      //     ) {
+                      //       submitLine();
+                      //     } else {
+                      //       setDragging(false);
+                      //       if (timeoutRef != null) {
+                      //         clearTimeout(timeoutRef);
+                      //         setTimeoutRef(null);
+                      //       }
+                      //       const newTimeoutRef = setTimeout(() => {
+                      //         setTimeoutRef(null);
+                      //         setDragging(true);
+                      //       }, 200);
+                      //       setTimeoutRef(newTimeoutRef);
+                      //       nodeInteractionHandler(id);
+                      //     }
+                      //   }
+                      // }}
+                      // onMouseEnter={(e) => {
+                      //   if (e.buttons === 1) {
+                      //     console.log("dragged over", id);
+                      //     nodeInteractionHandler(id);
+                      //   }
+                      // }}
+                      // onPointerDown={(e) => {
+                      //   console.log("dragged start", id);
+                      //   if(e.buttons === 1) {
+                      //     nodeInteractionHandler(id);
+                      //   }
+                      // }}
+                      onPointerDown={(e) => {
+                        console.log('pointer down', e)
+                        if(e.pointerType == "touch" || ( e.pointerType == "mouse" && e.buttons == 1 )) {
+                          setDownId(id);
+                          console.log('valid pointer down')
+                          if(currentLine[currentLine.length - 1] == id) {
                             submitLine();
                           } else {
-                            setDragging(false);
-                            if (timeoutRef != null) {
-                              clearTimeout(timeoutRef);
-                              setTimeoutRef(null);
-                            }
-                            const newTimeoutRef = setTimeout(() => {
-                              setTimeoutRef(null);
-                              setDragging(true);
-                            }, 200);
-                            setTimeoutRef(newTimeoutRef);
                             nodeInteractionHandler(id);
                           }
                         }
                       }}
-                      onMouseEnter={(e) => {
-                        if (e.buttons === 1) {
-                          console.log("dragged over", id);
+                      onPointerMove={(e) => {
+                        console.log('pointer move on id', id);
+                        if(!(e.pointerType == "touch" || ( e.pointerType == "mouse" && e.buttons == 1 ))) return;
+                        console.log('a');
+                        if(currentLine[currentLine.length - 1] == id) return;
+                        console.log('b');
+                        if(!dragging) setDragging(true);
+                        console.log('c');
+                        if (
+                          currentLine.length > 1 &&
+                          currentLine[currentLine.length - 1] == id
+                        ) {
+                          submitLine();
+                        } else {
+                          if (timeoutRef != null) {
+                            clearTimeout(timeoutRef);
+                            setTimeoutRef(null);
+                          }
+                          const newTimeoutRef = setTimeout(() => {
+                            setTimeoutRef(null);
+                          }, 200);
+                          setTimeoutRef(newTimeoutRef);
                           nodeInteractionHandler(id);
                         }
                       }}
-                      // onPointerEnter={(e) => {
-                      //   console.log("touched over", id);
-                      //   nodeInteractionHandler(id);
-                      // }}
-                      // onPointerDown={(e) => {
-                      //   console.log("dragged start", id);
-                      //   if (
-                      //     !dragging &&
-                      //     currentLine.length > 1 &&
-                      //     currentLine[currentLine.length - 1] == id
-                      //   ) {
-                      //     submitLine();
-                      //   } else {
-                      //     setDragging(false);
-                      //     if (timeoutRef != null) {
-                      //       clearTimeout(timeoutRef);
-                      //       setTimeoutRef(null);
-                      //     }
-                      //     const newTimeoutRef = setTimeout(() => {
-                      //       setTimeoutRef(null);
-                      //       setDragging(true);
-                      //     }, 200);
-                      //     setTimeoutRef(newTimeoutRef);
-                      //     nodeInteractionHandler(id);
-                      //   }
+                      // onPointerUp={(e) => {
+                      //   console.log('pointer up');
+                      //   if(id == downId) return;
+                      //   submitLine();
+                      //   setDownId('');
                       // }}
                     >
                       {letter}
