@@ -15,7 +15,7 @@ export default function Game({ data }: { data: GameData }) {
 
   const [timeoutRef, setTimeoutRef] = useState<number | null>(null);
   const [dragging, setDragging] = useState<boolean>(false);
-  const [downId, setDownId] = useState<string>('');
+  // const [downId, setDownId] = useState<string>('');
 
   const [foundLines, setFoundLines] =
     useRecoilState<string[][]>(foundLinesState);
@@ -227,7 +227,7 @@ export default function Game({ data }: { data: GameData }) {
                       onPointerDown={(e) => {
                         console.log('pointer down', e)
                         if(e.pointerType == "touch" || ( e.pointerType == "mouse" && e.buttons == 1 )) {
-                          setDownId(id);
+                          // setDownId(id);
                           console.log('valid pointer down')
                           if(currentLine[currentLine.length - 1] == id) {
                             submitLine();
